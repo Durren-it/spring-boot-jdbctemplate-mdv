@@ -38,22 +38,23 @@ public class TutorialController {
   }
 
   @PostMapping("/tutorials")
-  public ResponseEntity<String> createTutorial(@RequestBody Tutorial tutorial) {
+  public ResponseEntity<Tutorial> createTutorial(@RequestBody Tutorial tutorial) {
     try {
-      tutorialService.createTutorial(tutorial);
-      return new ResponseEntity<>("Tutorial was created successfully.", HttpStatus.CREATED);
+      Tutorial created = tutorialService.createTutorial(tutorial);
+      return new ResponseEntity<>(created, HttpStatus.CREATED);
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   @PutMapping("/tutorials/{id}")
-  public ResponseEntity<String> updateTutorial(@PathVariable("id") long id, @RequestBody Tutorial tutorial) {
+  public ResponseEntity<?> updateTutorial(@PathVariable("id") long id, @RequestBody Tutorial tutorial) {
     Tutorial updated = tutorialService.updateTutorial(id, tutorial);
     if (updated != null) {
-      return new ResponseEntity<>("Tutorial was updated successfully.", HttpStatus.OK);
+      return new ResponseEntity<>(updated, HttpStatus.OK);
     } else {
-      return new ResponseEntity<>("Cannot find Tutorial with id=" + id, HttpStatus.NOT_FOUND);
+      String errorMessage = "Cannot find tutorial with id=" + id;
+      return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
     }
   }
 
