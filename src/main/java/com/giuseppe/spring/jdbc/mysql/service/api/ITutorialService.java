@@ -1,4 +1,4 @@
-package com.giuseppe.spring.jdbc.mysql.service;
+package com.giuseppe.spring.jdbc.mysql.service.api;
 
 import com.giuseppe.spring.jdbc.mysql.model.Tutorial;
 

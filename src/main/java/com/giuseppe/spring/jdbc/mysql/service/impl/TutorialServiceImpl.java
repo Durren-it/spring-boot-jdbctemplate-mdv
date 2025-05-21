@@ -1,7 +1,8 @@
-package com.giuseppe.spring.jdbc.mysql.service;
+package com.giuseppe.spring.jdbc.mysql.service.impl;
 
 import com.giuseppe.spring.jdbc.mysql.model.Tutorial;
 import com.giuseppe.spring.jdbc.mysql.repository.TutorialRepository;
+import com.giuseppe.spring.jdbc.mysql.service.api.ITutorialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
