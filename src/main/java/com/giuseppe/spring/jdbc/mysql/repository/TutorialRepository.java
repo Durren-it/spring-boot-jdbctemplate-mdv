@@ -13,11 +13,19 @@ public interface TutorialRepository {
 
   int deleteById(Long id);
 
+  // Chiamata senza orderBy/limit
   List<Tutorial> findAll();
+
+  // Chiamata per orderBy/limit
+  List<Tutorial> findAll(String orderBy, Integer limit);
 
   List<Tutorial> findByPublished(boolean published);
 
+  // Chiamata senza orderBy/limit
   List<Tutorial> findByTitleContaining(String title);
+
+  // Chiamata per orderBy/limit
+  List<Tutorial> findByTitleContaining(String title, String orderBy, Integer limit);
 
   int deleteAll();
 }

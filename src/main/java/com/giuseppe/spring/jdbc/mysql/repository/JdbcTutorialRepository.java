@@ -46,8 +46,29 @@ public class JdbcTutorialRepository implements TutorialRepository {
   }
 
   @Override
+  public List<Tutorial> findAll(String orderBy, Integer limit) {
+    String sql = "SELECT * from tutorials";
+    if (orderBy != null && !orderBy.isEmpty()) {
+      // Valida che orderBy abbia un valore atteso, altrimenti usa un default
+      if (!orderBy.equalsIgnoreCase("id") &&
+              !orderBy.equalsIgnoreCase("title") &&
+              !orderBy.equalsIgnoreCase("description") &&
+              !orderBy.equalsIgnoreCase("published")) {
+        orderBy = "id";  // fallback
+      }
+      sql += " ORDER BY " + orderBy;
+    }
+    if (limit != null && limit > 0) {
+      sql += " LIMIT " + limit;
+    }
+    return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Tutorial.class));
+  }
+
+  // Implementazione della chiamata senza orderBy/limit
+  @Override
   public List<Tutorial> findAll() {
-    return jdbcTemplate.query("SELECT * from tutorials", BeanPropertyRowMapper.newInstance(Tutorial.class));
+    String sql = "SELECT * FROM tutorials";
+    return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Tutorial.class));
   }
 
   @Override
@@ -57,10 +78,37 @@ public class JdbcTutorialRepository implements TutorialRepository {
   }
 
   @Override
-  public List<Tutorial> findByTitleContaining(String title) {
-    String q = "SELECT * from tutorials WHERE title LIKE '%" + title + "%'";
+  public List<Tutorial> findByTitleContaining(String title, String orderBy, Integer limit) {
+    String sql = "SELECT * from tutorials WHERE title LIKE ?";
 
-    return jdbcTemplate.query(q, BeanPropertyRowMapper.newInstance(Tutorial.class));
+    // Aggiunge ORDER BY se specificato
+    if (orderBy != null && !orderBy.isEmpty()) {
+      // Validazione su orderBy per evitare SQL injection, ammessi solo alcuni nomi di colonna
+      if (!orderBy.equalsIgnoreCase("id") &&
+              !orderBy.equalsIgnoreCase("title") &&
+              !orderBy.equalsIgnoreCase("description") &&
+              !orderBy.equalsIgnoreCase("published")) {
+        orderBy = "id";  // fallback di default
+      }
+      sql += " ORDER BY " + orderBy;
+    }
+
+    // Aggiunge LIMIT se specificato
+    if (limit != null && limit > 0) {
+      sql += " LIMIT " + limit;
+    }
+
+    return jdbcTemplate.query(
+            sql,
+            BeanPropertyRowMapper.newInstance(Tutorial.class),
+            "%" + title + "%"
+    );
+  }
+
+  // Implementazione della chiamata senza orderBy/limit
+  @Override
+  public List<Tutorial> findByTitleContaining(String title) {
+    return findByTitleContaining(title, null, null);
   }
 
   @Override

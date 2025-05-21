@@ -15,13 +15,23 @@ public class TutorialServiceImpl implements ITutorialService {
     private TutorialRepository tutorialRepository;
 
     @Override
-    public List<Tutorial> getAllTutorials(String title) {
+    public List<Tutorial> getAllTutorials(String title, String orderBy, Integer limit) {
         if (title == null) {
-            return tutorialRepository.findAll();
+            if (orderBy != null || limit != null) {
+                return tutorialRepository.findAll(orderBy, limit);
+            } else {
+                return tutorialRepository.findAll();
+            }
         } else {
-            return tutorialRepository.findByTitleContaining(title);
+            if (orderBy != null || limit != null) {
+                return tutorialRepository.findByTitleContaining(title, orderBy, limit);
+            } else {
+                // Nel caso non siano presenti orderBy e limit si usa il metodo a un parametro
+                return tutorialRepository.findByTitleContaining(title);
+            }
         }
     }
+
 
     @Override
     public Tutorial getTutorialById(long id) {

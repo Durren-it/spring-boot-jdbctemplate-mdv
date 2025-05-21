@@ -19,8 +19,11 @@ public class TutorialController {
   }
 
   @GetMapping("/tutorials")
-  public ResponseEntity<List<Tutorial>> getAllTutorials(@RequestParam(required = false) String title) {
-    List<Tutorial> tutorials = tutorialService.getAllTutorials(title);
+  public ResponseEntity<List<Tutorial>> getAllTutorials(
+          @RequestParam(required = false) String title,
+          @RequestParam(required = false) String orderBy,
+          @RequestParam(required = false) Integer limit) {
+    List<Tutorial> tutorials = tutorialService.getAllTutorials(title, orderBy, limit);
     if (tutorials.isEmpty()) {
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

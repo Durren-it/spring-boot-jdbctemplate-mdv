@@ -12,7 +12,7 @@ public interface ITutorialService {
     /**
      *Restituisce tutti i tutorials.
      */
-    List<Tutorial> getAllTutorials(String title);
+    List<Tutorial> getAllTutorials(String title, String orderBy, Integer limit);
 
     /**
      *Restituisce un tutorial dato il suo id.
